@@ -87,7 +87,7 @@ class Location:
             print(self.long_description)
             self.visited = True
 
-    def remove_item(self, item_name: str) -> Item:
+    def remove_item(self, item_name: str) -> Item | None:
         for item in self.items:
             if item.name == item_name:
                 self.items.remove(item)
@@ -103,14 +103,15 @@ class Location:
     # The only thing you must NOT change is the name of this class: Location.
     # All locations in your game MUST be represented as an instance of this class.
 
-    def __init__(self, location_id, brief_description, long_description, available_commands, items,
+    def __init__(self, name, location_id, brief_description, long_description, available_commands, items,
                  visited=False) -> None:
         """Initialize a new location.
 
         # TODO Add more details here about the initialization if needed
         """
-
+        
         self.id_num = location_id
+        self.name = name
         self.brief_description = brief_description
         self.long_description = long_description
         self.available_commands = available_commands

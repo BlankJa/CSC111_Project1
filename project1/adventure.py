@@ -161,7 +161,6 @@ class AdventureGame:
         elif command in self.interactions:
             if command == 'take':
                 self.interact_take()
-
         return True
 
     def menu_look(self) -> None:
@@ -242,7 +241,7 @@ if __name__ == "__main__":
             tips += cmd + ", "
         print(tips[:-2] + ".")
         print("At this location, you can also:")
-        print(location.available_commands)
+        # print(location.available_commands)
         for action in location.available_commands:
             print("-", action, end='\n')
 
