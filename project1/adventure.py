@@ -169,6 +169,8 @@ class AdventureGame:
         elif command in self.interactions:
             if command == 'take':
                 self.interact_take()
+            elif command == 'drop':
+                self.interact_drop()
         return True
 
 
@@ -234,6 +236,57 @@ class AdventureGame:
             )
         else:
             print("Cannot take that item.")
+
+    def interact_use(self) -> None:
+        """Use an item from inventory."""
+        if not self._items:
+            print("Inventory is empty.")
+            return
+        print("Inventory:", [item.name for item in self.inventory])
+        item_name = input("Enter item name to use (or 'cancel'): ").strip()
+        if item_name == 'cancel':
+            return
+        item_to_use = self.get_item_obj(item_name)
+        if item_to_use:
+            # 检查是否在目标位置
+            if self.current_location_id == item_to_use.target_position:
+                self.score += item_to_use.target_points
+                print(f"Used {item_name}! Gained {item_to_use.target_points} points.")
+                self._items.remove(item_to_use)
+            else:
+                print("This item cannot be used here.")
+            # 记录事件
+            self.log.add_event(Event(self.current_location_id, self.get_location().long_description),
+                               f"use {item_name}")
+        else:
+            print("Item not found in inventory.")
+
+    def interact_drop(self) -> None:
+        """Drop an item from inventory."""
+        if not self.inventory:
+            print("Inventory is empty, failed to drop.")
+            return
+        print("Available items:", [item.name for item in self.inventory])
+        item_name = input("Enter item name to drop (or 'cancel'): ").strip()
+        if item_name == "cancel":
+            return
+        elif item_name not in [item.name for item in self.inventory]:
+            print("Item not found in inventory.")
+            return
+
+        item_to_drop = self.get_item_obj(item_name)
+        loc = self.get_location()
+        loc.add_item(item_name)
+        self.inventory.remove(item_to_drop)
+        print(f"You dropped {item_name}.")
+
+        self.log.add_event(
+            Event(loc.id_num, loc.long_description, {'action': 'drop', 'item': item_name}),
+            command=f"drop {item_name}"
+        )
+
+
+
 
 if __name__ == "__main__":
 
