@@ -59,7 +59,7 @@ class AdventureGame:
     # _menu: dict[str, function]
     menu: list[str]
     interactions: list[str]
-    inventory: list[str]
+    inventory: list[Item]
     current_location_id: int  # Suggested attribute, can be removed
     score: int
     ongoing: bool  # Suggested attribute, can be removed
@@ -124,21 +124,21 @@ class AdventureGame:
 
         # TOD: Complete this method as specified
         # YOUR CODE BELOW
-        if loc_id is None:  
+        if loc_id is None:
             loc_id = self.current_location_id
         for loc in self._locations.keys():
             if loc == loc_id:
                 return self._locations[loc]
         # 输入的 loc_id 不存在
         return None
-    
+
     def get_item_obj(self, item_name: str) -> Optional[Item]:
         """Return Item object associated with the provided item name.
         If no name is provided, return None.
         """
         return next((item for item in self._items if item.name == item_name), None)
 
-    
+
     def action(self, command: str) -> bool:
         """Perform the given command in the current location.
         Return True if the command was successful, False otherwise.
@@ -171,11 +171,11 @@ class AdventureGame:
                 self.interact_take()
         return True
 
-    
+
     def menu_look(self) -> None:
         """output the full description of the current location."""
         print(self.get_location().long_description)
-    
+
     def menu_inventory(self):
         """output the player's inventory."""
         # print("Inventory: " + str(self.inventory))
@@ -184,11 +184,11 @@ class AdventureGame:
     def menu_score(self):
         """output the player's score."""
         print("Score: " + str(self.score))
-    
+
     def menu_log(self):
         """output the game log."""
         self.log.display_events()
-    
+
     def menu_undo(self):
         """undo the last action."""
         # 撤销物品？
@@ -199,12 +199,12 @@ class AdventureGame:
         self.log.remove_last_event()
         self.current_location_id = self.log.get_last_event_id()
 
-    
+
     def menu_quit(self):
         """quit the game."""
         print("Quit")
         self.ongoing = False
-    
+
     def interact_take(self) -> None:
         """Take an item from current location and add to inventory."""
         loc = self.get_location()
@@ -215,20 +215,20 @@ class AdventureGame:
         item_name = input("Enter item name (or 'cancel' to abort): ").strip()
         if item_name == 'cancel':
             return
-        
+
         item_obj = self.get_item_obj(item_name)
-        
+
         if item_obj and item_name in loc.items:
             loc.remove_item(item_name)
             self.inventory.append(item_obj)
             print(f"You picked up {item_name}.")
-            
+
             if loc.id_num == item_obj.target_position:
                 self.score += item_obj.target_points
                 print(f"Delivered {item_name}! +{item_obj.target_points} points!")
-            
+
             self.log.add_event(
-                Event(loc.id_num, loc.long_description, 
+                Event(loc.id_num, loc.long_description,
                     {'action': 'take', 'item': item_name}),
                 command=f"take {item_name}"
             )
@@ -274,6 +274,6 @@ if __name__ == "__main__":
             print("That was an invalid option; try again.")
             choice = input("\nEnter action: ").lower().strip()
 
-        
+
         # TODO: Add in code to deal with actions which do not change the location (e.g. taking or using an item)
         # TODO: Add in code to deal with special locations (e.g. puzzles) as needed for your game

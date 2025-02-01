@@ -52,7 +52,7 @@ class Event:
     id_num: int
     description: str
     # Optional[x] = Union[x, None]
-    next_command: Optional[str] = None
+    next_command: Optional[dict] = None
     next: Optional[Event] = None
     prev: Optional[Event] = None
 
