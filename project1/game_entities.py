@@ -87,7 +87,7 @@ class Location:
             print(self.long_description)
             self.visited = True
 
-    def remove_item(self, item_name: str) -> Item | None:
+    def remove_item(self, item_name: str) -> Item or None:
         for item in self.items:
             if item.name == item_name:
                 self.items.remove(item)
