@@ -200,6 +200,7 @@ class AdventureGame:
         self._items.append(item)
         print("You took " + item.name + "from" + loc.name)
 
+
 if __name__ == "__main__":
 
     # When you are ready to check your work with python_ta, uncomment the following lines.
