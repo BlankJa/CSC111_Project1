@@ -169,10 +169,6 @@ class AdventureGame:
         elif command in self.interactions:
             if command == 'take':
                 self.interact_take()
-            elif command == 'drop':
-                self.interact_drop()
-            elif command == 'use':
-                self.interact_use()
         return True
 
     
@@ -182,7 +178,8 @@ class AdventureGame:
     
     def menu_inventory(self):
         """output the player's inventory."""
-        print("Inventory: " + str(self.inventory))
+        # print("Inventory: " + str(self.inventory))
+        print("Inventory: " + str([item.name for item in self.inventory]))
 
     def menu_score(self):
         """output the player's score."""
@@ -237,56 +234,6 @@ class AdventureGame:
             )
         else:
             print("Cannot take that item.")
-
-    def interact_drop(self) -> None:
-        """Drop an item from inventory to current location."""
-        if not self.inventory:
-            print("Your inventory is empty.")
-            return
-        
-        print("Inventory items:", [item.name for item in self.inventory])
-        item_name = input("Enter item name to drop (or 'cancel'): ").strip()
-        if item_name == 'cancel':
-            return
-        
-        item_obj = next((item for item in self.inventory if item.name == item_name), None)
-        
-        if item_obj:
-            self.inventory.remove(item_obj)
-            loc = self.get_location()
-            loc.add_item(item_name)
-            print(f"You dropped {item_name}.")
-            
-            self.log.add_event(
-                Event(loc.id_num, loc.long_description,
-                    {'action': 'drop', 'item': item_name}),
-                command=f"drop {item_name}"
-            )
-        else:
-            print("Item not found in inventory.")
-
-    def interact_use(self) -> None:
-        """Use an item from inventory."""
-        if not self._items:
-            print("Inventory is empty.")
-            return
-        print("Inventory:", [item.name for item in self.inventory])
-        item_name = input("Enter item name to use (or 'cancel'): ").strip()
-        if item_name == 'cancel':
-            return
-        item_to_use = self.get_item_obj(item_name)
-        if item_to_use:
-            # 检查是否在目标位置
-            if self.current_location_id == item_to_use.target_position:
-                self.score += item_to_use.target_points
-                print(f"Used {item_name}! Gained {item_to_use.target_points} points.")
-                self._items.remove(item_to_use)
-            else:
-                print("This item cannot be used here.")
-            # 记录事件
-            self.log.add_event(Event(self.current_location_id, self.get_location().long_description), f"use {item_name}")
-        else:
-            print("Item not found in inventory.")
 
 if __name__ == "__main__":
 
