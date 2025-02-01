@@ -40,8 +40,8 @@ class AdventureGame:
         - _log: EventList object representing the game log
         - _menu: list of strings representing the menu options
         - current_location_id: int indicating the current location id of the game
+        - score: int indicating the score of the game
         - ongoing: bool indicating whether the game is ongoing
-        - score: current score of player
 
     Representation Invariants:
         - # TOD add any appropriate representation invariants as needed
@@ -56,8 +56,10 @@ class AdventureGame:
     _locations: dict[int, Location]
     _items: list[Item]
     log: EventList
+    # _menu: dict[str, function]
     menu: list[str]
     interactions: list[str]
+    inventory: list[str]
     current_location_id: int  # Suggested attribute, can be removed
     score: int
     ongoing: bool  # Suggested attribute, can be removed
@@ -82,14 +84,13 @@ class AdventureGame:
         # Suggested helper method (you can remove and load these differently if you wish to do so):
         self._locations, self._items = self._load_game_data(game_data_file)
         self.log = EventList()
-
         self.menu = ['look', 'inventory', 'score', 'undo', 'log', 'quit']
         self.interactions = ['take', 'drop', 'use']
-        # Suggested attributes (you can remove and track these differently if you wish to do so):
+        self.inventory = []
         self.current_location_id = initial_location_id  # game begins at this location
+        self.score = 0  # player's score
         self.ongoing = True  # whether the game is ongoing
-        self.score = 0
-        # enter初始位置
+        # 进入初始位置
         self.get_location().enter()
 
     @staticmethod
@@ -103,6 +104,7 @@ class AdventureGame:
 
         locations = {}
         for loc_data in data['locations']:  # Go through each element associated with the 'locations' key in the file
+            # print(loc_data['available_commands'])
             location_obj = Location(loc_data['id'], loc_data['name'], loc_data['brief_description'], loc_data['long_description'],
                                     loc_data['available_commands'], loc_data['items'])
             locations[loc_data['id']] = location_obj
@@ -111,10 +113,9 @@ class AdventureGame:
         # TOD: Add Item objects to the items list; your code should be structured similarly to the loop above
         # YOUR CODE BELOW
         for item in data['items']:
-            item_obj = Item(item['name'], item['start_position'], item['target_position'], item['target_points'],
-                            item['description'])
+            item_obj = Item(item['name'], item['description'], item['start_position'], item['target_position'], item['target_points'])
             items.append(item_obj)
-        return (locations, items)
+        return locations, items
 
     def get_location(self, loc_id: Optional[int] = None) -> Optional[Location]:
         """Return Location object associated with the provided location ID.
@@ -123,18 +124,25 @@ class AdventureGame:
 
         # TOD: Complete this method as specified
         # YOUR CODE BELOW
-        if loc_id is None:
+        if loc_id is None:  
             loc_id = self.current_location_id
         for loc in self._locations.keys():
             if loc == loc_id:
                 return self._locations[loc]
+        # 输入的 loc_id 不存在
         return None
+    
+    def get_item_obj(self, item_name: str) -> Optional[Item]:
+        """Return Item object associated with the provided item name.
+        If no name is provided, return None.
+        """
+        return next((item for item in self._items if item.name == item_name), None)
 
+    
     def action(self, command: str) -> bool:
         """Perform the given command in the current location.
         Return True if the command was successful, False otherwise.
         """
-
         loc = self.get_location()
         if not (command in loc.available_commands or command in self.menu or command in self.interactions):
             return False
@@ -161,44 +169,124 @@ class AdventureGame:
         elif command in self.interactions:
             if command == 'take':
                 self.interact_take()
+            elif command == 'drop':
+                self.interact_drop()
+            elif command == 'use':
+                self.interact_use()
         return True
 
+    
     def menu_look(self) -> None:
+        """output the full description of the current location."""
         print(self.get_location().long_description)
-
+    
     def menu_inventory(self):
-        print("Inventory: " + str(self._items))
+        """output the player's inventory."""
+        print("Inventory: " + str(self.inventory))
 
     def menu_score(self):
+        """output the player's score."""
         print("Score: " + str(self.score))
-
+    
     def menu_log(self):
+        """output the game log."""
         self.log.display_events()
-
+    
     def menu_undo(self):
-        if(self.log.is_empty()):
+        """undo the last action."""
+        # 撤销物品？
+        if (self.log.is_empty()):
             print("No action to undo.")
             return
         print("Undo")
         self.log.remove_last_event()
         self.current_location_id = self.log.get_last_event_id()
 
+    
     def menu_quit(self):
+        """quit the game."""
         print("Quit")
         self.ongoing = False
-
+    
     def interact_take(self) -> None:
-        """Take the item from the current location"""
+        """Take an item from current location and add to inventory."""
         loc = self.get_location()
-        print("Enter 'cancel' to cancel")
-        print("You can take: " + str(loc.items))
-        item_name = input("Enter item name: ")
-        if item_name == 'cancel' or item_name not in loc.items:
+        if not loc.items:
+            print("There are no items to pick up here.")
             return
-        item = loc.remove_item(item_name)
-        self._items.append(item)
-        print("You took " + item.name + "from" + loc.name)
+        print("Available items:", loc.items)
+        item_name = input("Enter item name (or 'cancel' to abort): ").strip()
+        if item_name == 'cancel':
+            return
+        
+        item_obj = self.get_item_obj(item_name)
+        
+        if item_obj and item_name in loc.items:
+            loc.remove_item(item_name)
+            self.inventory.append(item_obj)
+            print(f"You picked up {item_name}.")
+            
+            if loc.id_num == item_obj.target_position:
+                self.score += item_obj.target_points
+                print(f"Delivered {item_name}! +{item_obj.target_points} points!")
+            
+            self.log.add_event(
+                Event(loc.id_num, loc.long_description, 
+                    {'action': 'take', 'item': item_name}),
+                command=f"take {item_name}"
+            )
+        else:
+            print("Cannot take that item.")
 
+    def interact_drop(self) -> None:
+        """Drop an item from inventory to current location."""
+        if not self.inventory:
+            print("Your inventory is empty.")
+            return
+        
+        print("Inventory items:", [item.name for item in self.inventory])
+        item_name = input("Enter item name to drop (or 'cancel'): ").strip()
+        if item_name == 'cancel':
+            return
+        
+        item_obj = next((item for item in self.inventory if item.name == item_name), None)
+        
+        if item_obj:
+            self.inventory.remove(item_obj)
+            loc = self.get_location()
+            loc.add_item(item_name)
+            print(f"You dropped {item_name}.")
+            
+            self.log.add_event(
+                Event(loc.id_num, loc.long_description,
+                    {'action': 'drop', 'item': item_name}),
+                command=f"drop {item_name}"
+            )
+        else:
+            print("Item not found in inventory.")
+
+    def interact_use(self) -> None:
+        """Use an item from inventory."""
+        if not self._items:
+            print("Inventory is empty.")
+            return
+        print("Inventory:", [item.name for item in self.inventory])
+        item_name = input("Enter item name to use (or 'cancel'): ").strip()
+        if item_name == 'cancel':
+            return
+        item_to_use = self.get_item_obj(item_name)
+        if item_to_use:
+            # 检查是否在目标位置
+            if self.current_location_id == item_to_use.target_position:
+                self.score += item_to_use.target_points
+                print(f"Used {item_name}! Gained {item_to_use.target_points} points.")
+                self._items.remove(item_to_use)
+            else:
+                print("This item cannot be used here.")
+            # 记录事件
+            self.log.add_event(Event(self.current_location_id, self.get_location().long_description), f"use {item_name}")
+        else:
+            print("Item not found in inventory.")
 
 if __name__ == "__main__":
 
@@ -211,30 +299,18 @@ if __name__ == "__main__":
     #     'disable': ['R1705', 'E9998', 'E9999']
     # })
 
-    # game_log = EventList()  # This is REQUIRED as one of the baseline requirements
+    # AdventureGame 中有一个 EventList 类，用于存储游戏的事件日志
+    #game_log = EventList()  # This is REQUIRED as one of the baseline requirements
     game = AdventureGame('game_data.json', 1)  # load data, setting initial location ID to 1
     menu = ["look", "inventory", "score", "undo", "log", "quit"]  # Regular menu options available at each location
     choice = None
-    # print(game.log.is_empty())
 
     # Note: You may modify the code below as needed; the following starter code is just a suggestion
     while game.ongoing:
         # Note: If the loop body is getting too long, you should split the body up into helper functions
         # for better organization. Part of your marks will be based on how well-organized your code is.
-
         location = game.get_location()
-
-        # TOD: Add new Event to game log to represent current game location
-        #  Note that the <choice> variable should be the command which led to this event
-        # YOUR CODE HERE
-
-
-        # TOD: Depending on whether or not it's been visited before,
-        #  print either full description (first time visit) or brief description (every subsequent visit) of location
-        # YOUR CODE HERE
-
         # Display possible actions at this location
-
         tips = "What to do? Choose from: "
         for cmd in game.menu:
             if cmd == "undo" and game.log.is_empty():
@@ -242,9 +318,8 @@ if __name__ == "__main__":
             tips += cmd + ", "
         print(tips[:-2] + ".")
         print("At this location, you can also:")
-        # print(location.available_commands)
         for action in location.available_commands:
-            print("-", action, end='\n')
+            print("-", action)
 
         # Validate choice
         choice = input("\nEnter action: ").lower().strip()
@@ -252,20 +327,6 @@ if __name__ == "__main__":
             print("That was an invalid option; try again.")
             choice = input("\nEnter action: ").lower().strip()
 
-        print("========")
-        print("You decided to:", choice)
-
-        # if choice in menu:
-        #     # TOD: Handle each menu command as appropriate
-        #     # Note: For the "undo" command, remember to manipulate the game_log event list to keep it up-to-date
-        #     if choice == "log":
-        #         game_log.display_events()
-        #     # ENTER YOUR CODE BELOW to handle other menu commands (remember to use helper functions as appropriate)
-        #
-        # else:
-        #     # Handle non-menu actions
-        #     result = location.available_commands[choice]
-        #     game.current_location_id = result
-        #
-        #     # TOD: Add in code to deal with actions which do not change the location (e.g. taking or using an item)
-        #     # TOD: Add in code to deal with special locations (e.g. puzzles) as needed for your game
+        
+        # TODO: Add in code to deal with actions which do not change the location (e.g. taking or using an item)
+        # TODO: Add in code to deal with special locations (e.g. puzzles) as needed for your game

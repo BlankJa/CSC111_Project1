@@ -27,16 +27,16 @@ class Item:
 
     Instance Attributes:
         - # TOD Describe each instance attribute here
-        - start_position: the start position of the item
-        - name: item's name
-        - target_position: target position of item
-        - target_points: target point of item
+        - name: name of item
         - description: description of item
+        - start_position: start position of item
+        - target_position: target position of item
+        - target_points: target points of item
 
     Representation Invariants:
         - # TOD Describe any necessary representation invariants
-        - target_ponints > 0
         - start_position != target_position
+        - target_points > 0
     """
 
     # NOTES:
@@ -48,10 +48,10 @@ class Item:
     # All item objects in your game MUST be represented as an instance of this class.
 
     name: str
+    description: str
     start_position: int
     target_position: int
     target_points: int
-    description: str
 
 
 @dataclass
@@ -60,42 +60,17 @@ class Location:
 
     Instance Attributes:
         - # TOD Describe each instance attribute here
-        - id_num: integer id for this location
-        - brief_description: brief description of this location
-        - available_commands: a mapping of available commands at this location to
-                                the location executing that command would lead to
-        - long_description: long description of this location
-        - items: a list of item
-        - visited: whether this location has been visited or not
+        - id_num: int id
+        - brief_description: brief description
+        - long_description: long description
+        - available_commands: a mapping of available commands
+        - items: a list of item names
+        - visited: a boolean indicating whether this location has been visited
 
     Representation Invariants:
         - # TOD Describe any necessary representation invariants
         - available_commands != {}
     """
-    id_num: int
-    name: str
-    brief_description: str
-    long_description: str
-    available_commands: dict[str, int]
-    items: list[Item]
-    visited: bool = False
-
-    def enter(self) -> None:
-        if self.visited:
-            print(self.brief_description)
-        else:
-            print(self.long_description)
-            self.visited = True
-
-    def remove_item(self, item_name: str) -> Item or None:
-        for item in self.items:
-            if item.name == item_name:
-                self.items.remove(item)
-                return item
-
-    def add_item(self, item: Item) -> None:
-        """Add item to this location"""
-        self.items.append(item)
 
     # This is just a suggested starter class for Location.
     # You may change/add parameters and the data available for each Location object as you see fit.
@@ -103,22 +78,30 @@ class Location:
     # The only thing you must NOT change is the name of this class: Location.
     # All locations in your game MUST be represented as an instance of this class.
 
-    def __init__(self, name, location_id, brief_description, long_description, available_commands, items,
-                 visited=False) -> None:
-        """Initialize a new location.
+    id_num: int
+    name: str
+    brief_description: str
+    long_description: str
+    available_commands: dict[str, int]
+    items: list[str]
+    visited: bool = False
 
-        # TODO Add more details here about the initialization if needed
-        """
-        
-        self.id_num = location_id
-        self.name = name
-        self.brief_description = brief_description
-        self.long_description = long_description
-        self.available_commands = available_commands
-        self.items = items
-        self.visited = visited
-
-
+    # 进入场景
+    def enter(self) -> None:
+        """Enter this location."""
+        if self.visited:
+            print(self.brief_description)
+        else:
+            print(self.long_description)
+            self.visited = True
+    
+    def remove_item(self, item_name: str):
+        """Remove item from this location."""
+        self.items.remove(item_name)
+    
+    def add_item(self, item_name: str) -> None:
+        """Add item to this location."""
+        self.items.append(item_name)
 
 
 # Note: Other entities you may want to add, depending on your game plan:
@@ -127,12 +110,12 @@ class Location:
 # etc.
 
 if __name__ == "__main__":
-    pass
+    # pass
     # When you are ready to check your work with python_ta, uncomment the following lines.
     # (Delete the "#" and space before each line.)
     # IMPORTANT: keep this code indented inside the "if __name__ == '__main__'" block
-    # import python_ta
-    # python_ta.check_all(config={
-    #     'max-line-length': 120,
-    #     'disable': ['R1705', 'E9998', 'E9999']
-    # })
+    import python_ta
+    python_ta.check_all(config={
+        'max-line-length': 120,
+        'disable': ['R1705', 'E9998', 'E9999']
+    })
