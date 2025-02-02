@@ -1,3 +1,4 @@
+
 """CSC111 Project 1: Text Adventure Game - Game Manager
 
 Instructions (READ THIS FIRST!)
@@ -210,7 +211,7 @@ class AdventureGame:
             elif "use" in lastevent:
                 self.score -= target_object.target_points
                 self._items.append(target_object)
-                # Inventory里是否也要添加回去？
+                self.inventory.append(target_object)
 
         self.current_location_id = self.log.get_last_event_id()
 
@@ -264,7 +265,7 @@ class AdventureGame:
                 self.score += item_to_use.target_points
                 print(f"Used {item_name}! Gained {item_to_use.target_points} points.")
                 self._items.remove(item_to_use)
-                # Inventory里的Item是否也要删除？
+                self.inventory.remove(item_to_use)
             else:
                 print("This item cannot be used here.")
             # 记录事件
