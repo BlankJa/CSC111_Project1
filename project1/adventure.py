@@ -138,7 +138,6 @@ class AdventureGame:
         """
         return next((item for item in self._items if item.name == item_name), None)
 
-
     def action(self, command: str) -> bool:
         """Perform the given command in the current location.
         Return True if the command was successful, False otherwise.
@@ -194,13 +193,26 @@ class AdventureGame:
     def menu_undo(self):
         """undo the last action."""
         # 撤销物品？
-        if (self.log.is_empty()):
+        if self.log.is_empty():
             print("No action to undo.")
             return
         print("Undo")
-        self.log.remove_last_event()
-        self.current_location_id = self.log.get_last_event_id()
+        lastevent = self.log.remove_last_event()
+        if lastevent:
+            target_object = self.get_item_obj(lastevent.split(' ', 1)[-1])
+            # 撤销 take
+            if "take" in lastevent:
+                self.inventory.remove(target_object)
+                self.get_location().add_item(target_object.name)
+            elif "drop" in lastevent:
+                self.inventory.append(target_object)
+                self.get_location().remove_item(target_object.name)
+            elif "use" in lastevent:
+                self.score -= target_object.target_points
+                self._items.append(target_object)
+                # Inventory里是否也要添加回去？
 
+        self.current_location_id = self.log.get_last_event_id()
 
     def menu_quit(self):
         """quit the game."""
@@ -230,8 +242,7 @@ class AdventureGame:
                 print(f"Delivered {item_name}! +{item_obj.target_points} points!")
 
             self.log.add_event(
-                Event(loc.id_num, loc.long_description,
-                    {'action': 'take', 'item': item_name}),
+                Event(loc.id_num, loc.long_description),
                 command=f"take {item_name}"
             )
         else:
@@ -253,11 +264,12 @@ class AdventureGame:
                 self.score += item_to_use.target_points
                 print(f"Used {item_name}! Gained {item_to_use.target_points} points.")
                 self._items.remove(item_to_use)
+                # Inventory里的Item是否也要删除？
             else:
                 print("This item cannot be used here.")
             # 记录事件
             self.log.add_event(Event(self.current_location_id, self.get_location().long_description),
-                               f"use {item_name}")
+                               command=f"use {item_name}")
         else:
             print("Item not found in inventory.")
 
@@ -281,11 +293,9 @@ class AdventureGame:
         print(f"You dropped {item_name}.")
 
         self.log.add_event(
-            Event(loc.id_num, loc.long_description, {'action': 'drop', 'item': item_name}),
+            Event(loc.id_num, loc.long_description),
             command=f"drop {item_name}"
         )
-
-
 
 
 if __name__ == "__main__":

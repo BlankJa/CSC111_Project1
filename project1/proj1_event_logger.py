@@ -52,7 +52,7 @@ class Event:
     id_num: int
     description: str
     # Optional[x] = Union[x, None]
-    next_command: Optional[dict] = None
+    next_command: Optional[str] = None
     next: Optional[Event] = None
     prev: Optional[Event] = None
 
@@ -113,7 +113,7 @@ class EventList:
         event.prev = self.last
         self.last = event
 
-    def remove_last_event(self) -> None:
+    def remove_last_event(self) -> Optional[str]:
         """Remove the last event from this event list.
         If the list is empty, do nothing."""
 
@@ -121,10 +121,15 @@ class EventList:
 
         # TOD: Your code below
         if self.is_empty():
-            return
+            return None
+        lastevent = None
+        if "take" or "drop" or "use" in self.last.prev.next_command:
+            lastevent = self.last.prev.next_command
+
         self.last = self.last.prev
         self.last.next = None
         self.last.next_command = None
+        return lastevent
 
     def get_id_log(self) -> list[int]:
         """Return a list of all location IDs visited for each event in this list, in sequence."""
