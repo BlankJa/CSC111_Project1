@@ -67,7 +67,8 @@
           "long_description": "Convocation Hall stands proudly, its domed roof a familiar sight for students attending lectures or graduation ceremonies. Inside, the echo of footsteps fills the vast space, and the stage stands ready for the next big event. Rows of seats stretch out in all directions, and you can feel the weight of history in the air. You can go South to Robarts or West to Tim Hortons.",
           "available_commands": {
               "go south": 5,
-              "go west": 7
+              "go west": 7,
+              "go east": 13
           },
           "items": []
       },
