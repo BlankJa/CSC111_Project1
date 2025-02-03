@@ -239,6 +239,9 @@ class AdventureGame:
             loc.remove_item(item_name)
             self.inventory.append(item_obj)
             print(f"You picked up {item_name}.")
+            #给出target_position的名字
+            target_loc = self.get_location(item_obj.target_position)
+            print("You can use this item in " + target_loc.name + "to gain " + str(item_obj.target_points) + " points.")
 
             if loc.id_num == item_obj.target_position:
                 self.score += item_obj.target_points

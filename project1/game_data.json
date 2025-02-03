@@ -1,57 +1,21 @@
 {
   "locations": [
-    {
-      "id": 1,
-      "name": "Bahen 1F",
-      "brief_description": "You are on the first floor of the Bahen Center. There are elevators to the West, and an exit from the building to St. George street to the East. You see something shiny on the ground -- looks like a toonie?",
-      "long_description": "You are on the first floor of the Bahen Center. It's usually crowded at this time of the day, but today it's eerily quiet. Only a few students are studying at the table near the doors. You better not disturb them. One student is rushing down the corridor, wearing a heavy-looking backpack and carrying a textbook in their arms. There are elevators to the West, and an exit from the building to St. George street to the East.",
-      "available_commands": {
-        "go south": 4,
-        "go east": 2
-      },
-      "items": ["toonie"]
-    },
-    {
-      "id": 2,
-      "name": "St. George Street",
-      "brief_description": "You are on St. George Street. There is a building to the West, and an exit to the East.",
-      "long_description": "You are on St. George Street. There is a building to the West, and an exit to the East.",
-      "available_commands": {
-        "go west": 1,
-        "go south": 3
-      },
-      "items": []
-    },
-    {
-      "id": 3,
-      "name": "Bahen 2F",
-      "brief_description": "You are on the second floor of the Bahen Center. There are elevators to the West, and an exit from the building to St. George street to the East.",
-      "long_description": "You are on the second floor of the Bahen Center. It's usually crowded at this time of the day, but today it's eerily quiet. Only a few students are studying at the table near the doors. You better not disturb them. One student is rushing down the corridor, wearing a heavy-looking backpack and carrying a textbook in their arms. There are elevators to the West, and an exit from the building to St. George street to the East.",
-      "available_commands": {
-        "go north": 2,
-        "go east": 4
-      },
-      "items": []
-    },
-    {
-      "id": 4,
-      "name": "Bahen 3F",
-      "brief_description": "You are on the third floor of the Bahen Center. There are elevators to the West, and an exit from the building to St. George street to the East.",
-      "long_description": "You are on the third floor of the Bahen Center. It's usually crowded at this time of the day, but today it's eerily quiet. Only a few students are studying at the table near the doors. You better not disturb them. One student is rushing down the corridor, wearing a heavy-looking backpack and carrying a textbook in their arms. There are elevators to the West, and an exit from the building to St. George street to the East.",
-      "available_commands": {
-        "go north": 1,
-        "go west": 3
-      },
-      "items": []
-    }
+    {"id": 1, "name": "Bahen 1F", "brief_description": "First floor of Bahen Center.", "long_description": "You are on the first floor of the Bahen Center. This floor is bustling with students heading to and from their classes. The smell of coffee drifts from a nearby lounge, and you can hear the faint tapping of laptop keyboards. There are elevators to the West and an exit to St. George Street to the East.", "available_commands": {"go south": 4, "go east": 2}, "items": ["toonie"]},
+    {"id": 2, "name": "St. George Street", "brief_description": "A busy street in the heart of UofT.", "long_description": "Students rush between buildings, some on bikes, others chatting in groups or looking at their phones. You can see Bahen Center to the West and the massive Robarts Library to the East. The sounds of honking and conversation blend together into the familiar hum of campus life.", "available_commands": {"go west": 1, "go south": 3, "go east": 5}, "items": []},
+    {"id": 3, "name": "Bahen 2F", "brief_description": "Second floor of Bahen Center.", "long_description": "A quieter study space than the first floor, this area has small clusters of students working on assignments. There are rows of computers available, but many are occupied. A vending machine hums in the corner, offering snacks and drinks to those who need a pick-me-up. There’s a hallway leading North to St. George Street and East to Bahen 3F.", "available_commands": {"go north": 2, "go east": 4}, "items": []},
+    {"id": 4, "name": "Bahen 3F", "brief_description": "Third floor of Bahen Center.", "long_description": "The third floor is dedicated to research and collaborative projects. Whiteboards filled with equations and diagrams line the walls. A group of students discuss something excitedly near a table filled with open laptops. The hallway leads West to Bahen 2F, and there is an elevator going down.", "available_commands": {"go north": 1, "go west": 3}, "items": []},
+    {"id": 5, "name": "Robarts Library", "brief_description": "The largest library on campus.", "long_description": "The towering bookshelves are filled with volumes on every subject imaginable. Students sit in study pods, focused on their work, while others browse through the stacks. The air is filled with the faint scent of old books and coffee. A librarian nods at you as they pass by. There is an exit to the West leading back to St. George Street.", "available_commands": {"go west": 2, "go north": 6}, "items": ["library_card"]},
+    {"id": 6, "name": "Convocation Hall", "brief_description": "A historic building used for ceremonies and lectures.", "long_description": "Convocation Hall stands proudly, its domed roof a familiar sight for students attending lectures or graduation ceremonies. Inside, the echo of footsteps fills the vast space, and the stage stands ready for the next big event. Rows of seats stretch out in all directions, and you can feel the weight of history in the air. You can go South to Robarts or West to Tim Hortons.", "available_commands": {"go south": 5, "go west": 7}, "items": []},
+    {"id": 7, "name": "Tim Hortons", "brief_description": "A coffee shop popular among students.", "long_description": "The line at Tim Hortons is long, as usual, but the aroma of freshly brewed coffee makes the wait worth it. Students huddle around small tables, some frantically reviewing notes while others chat about weekend plans. The baristas work quickly, calling out orders over the hum of conversation. You can exit East back to Convocation Hall or go South to the dormitory.", "available_commands": {"go east": 6, "go south": 8}, "items": ["coffee", "muffin"]},
+    {"id": 8, "name": "Dormitory", "brief_description": "Your cozy dorm room.", "long_description": "Your dorm room is a sanctuary of clutter and comfort. Your desk is covered with notes, half-finished assignments, and empty coffee cups. Your lucky UofT mug sits precariously on a pile of textbooks. The bed looks inviting, but there's no time to rest now. Posters and photos decorate the walls, reminding you of late-night study sessions and good times with friends. There’s a door leading North to Tim Hortons.", "available_commands": {"go north": 7}, "items": ["USB_drive", "laptop_charger", "lucky_mug"]}
   ],
   "items": [
-    {
-      "name": "toonie",
-      "description": "There is a toonie on the ground. Someone must have dropped it.",
-      "start_position": 1,
-      "target_position": 4,
-      "target_points": 5
-    }
+    {"name": "toonie", "description": "A shiny toonie on the ground.", "start_position": 1, "target_position": 4, "target_points": 5},
+    {"name": "library_card", "description": "A library card for accessing Robarts.", "start_position": 5, "target_position": 6, "target_points": 3},
+    {"name": "coffee", "description": "A hot cup of coffee from Tim Hortons.", "start_position": 7, "target_position": 8, "target_points": 2},
+    {"name": "muffin", "description": "A delicious blueberry muffin.", "start_position": 7, "target_position": 8, "target_points": 1},
+    {"name": "USB_drive", "description": "The USB drive containing your project.", "start_position": 8, "target_position": 1, "target_points": 10},
+    {"name": "laptop_charger", "description": "Your missing laptop charger.", "start_position": 8, "target_position": 3, "target_points": 7},
+    {"name": "lucky_mug", "description": "Your lucky UofT mug, essential for submission.", "start_position": 8, "target_position": 4, "target_points": 8}
   ]
 }
