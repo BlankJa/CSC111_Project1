@@ -93,6 +93,7 @@ class AdventureGame:
         self.ongoing = True  # whether the game is ongoing
         # 进入初始位置
         self.get_location().enter()
+        self.log.add_event(Event(initial_location_id, self.get_location(initial_location_id).long_description))
 
     @staticmethod
     def _load_game_data(filename: str) -> tuple[dict[int, Location], list[Item]]:
@@ -172,7 +173,6 @@ class AdventureGame:
             elif command == 'drop':
                 self.interact_drop()
         return True
-
 
     def menu_look(self) -> None:
         """output the full description of the current location."""

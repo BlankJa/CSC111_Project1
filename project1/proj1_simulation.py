@@ -113,13 +113,17 @@ if __name__ == "__main__":
     win_walkthrough = []  # Create a list of all the commands needed to walk through your game to win it
     expected_log = []  # Update this log list to include the IDs of all locations that would be visited
     # Uncomment the line below to test your walkthrough
-    assert expected_log == AdventureGameSimulation('game_data.json', 1, win_walkthrough)
+    # assert expected_log == AdventureGameSimulation('game_data.json', 1, win_walkthrough) mistake in starter code
+    sim = AdventureGameSimulation('game_data.json', 1, win_walkthrough)
+    assert expected_log == sim.get_id_log()
 
     # Create a list of all the commands needed to walk through your game to reach a 'game over' state
     lose_demo = []
     expected_log = []  # Update this log list to include the IDs of all locations that would be visited
     # Uncomment the line below to test your demo
-    assert expected_log == AdventureGameSimulation('game_data.json', 1, lose_demo)
+    # assert expected_log == AdventureGameSimulation('game_data.json', 1, lose_demo) mistake in starter code
+    sim = AdventureGameSimulation('game_data.json', 1, lose_demo)
+    assert expected_log == sim.get_id_log()
 
     # TODO: Add code below to provide walkthroughs that show off certain features of the game
     # TODO: Create a list of commands involving visiting locations, picking up items, and then
