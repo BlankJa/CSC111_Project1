@@ -172,6 +172,8 @@ class AdventureGame:
                 self.interact_take()
             elif command == 'drop':
                 self.interact_drop()
+            elif command == 'use':
+                self.interact_use()
         return True
 
     def menu_look(self) -> None:
