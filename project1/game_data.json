@@ -57,7 +57,8 @@
               "go north": 6
           },
           "items": [
-              "library_card"
+              "library_card",
+              "laptop_charger"
           ]
       },
       {
@@ -95,8 +96,6 @@
               "go north": 7
           },
           "items": [
-              "USB_drive",
-              "laptop_charger",
               "lucky_mug"
           ]
       },
@@ -170,7 +169,9 @@
               "go west": 13,
               "go south": 4
           },
-          "items": []
+          "items": [
+              "USB_drive"
+          ]
       },
       {
           "id": 15,
@@ -228,22 +229,22 @@
       {
           "name": "USB_drive",
           "description": "The USB drive containing your project.",
-          "start_position": 8,
-          "target_position": 1,
+          "start_position": 14,
+          "target_position": 8,
           "target_points": 10
       },
       {
           "name": "laptop_charger",
           "description": "Your missing laptop charger.",
-          "start_position": 8,
-          "target_position": 3,
+          "start_position": 5,
+          "target_position": 8,
           "target_points": 7
       },
       {
           "name": "lucky_mug",
           "description": "Your lucky UofT mug, essential for submission.",
           "start_position": 8,
-          "target_position": 4,
+          "target_position": 8,
           "target_points": 8
       }
   ]
