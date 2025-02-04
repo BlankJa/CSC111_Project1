@@ -72,7 +72,7 @@ class AdventureGame:
         (note: you are allowed to modify the format of the file as you see fit)
 
         Preconditions:
-        - game_data_file is the filename of a valid game data JSON file
+        - initial_location_id in game_data_file
         """
 
         # NOTES:
@@ -344,7 +344,7 @@ if __name__ == "__main__":
     # AdventureGame 中有一个 EventList 类，用于存储游戏的事件日志
     #game_log = EventList()  # This is REQUIRED as one of the baseline requirements
     game = AdventureGame('game_data.json', 1)  # load data, setting initial location ID to 1
-    menu = ["look", "inventory", "score", "undo", "log", "quit"]  # Regular menu options available at each location
+    # menu = ["look", "inventory", "score", "undo", "log", "quit", "step"]  # Regular menu options available at each location
     choice = None
 
     # Note: You may modify the code below as needed; the following starter code is just a suggestion
