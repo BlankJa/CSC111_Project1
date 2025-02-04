@@ -166,6 +166,9 @@ class AdventureGame:
             elif command == 'score':
                 self.menu_score()
             elif command == 'undo':
+                if self.currstep == 0:
+                    print("You have not moved yet!")
+                    return True
                 self.menu_undo()
                 self.currstep -= 1
             elif command == 'log':
