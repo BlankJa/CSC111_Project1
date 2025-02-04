@@ -94,6 +94,9 @@ class AdventureGame:
         # 进入初始位置
         self.get_location().enter()
         self.log.add_event(Event(initial_location_id, self.get_location(initial_location_id).long_description))
+        self.win_score = 25
+        self.currstep = 0
+        self.maxstep = 27  # 最大步数暂定27
 
     @staticmethod
     def _load_game_data(filename: str) -> tuple[dict[int, Location], list[Item]]:
@@ -154,6 +157,7 @@ class AdventureGame:
             loc = self.get_location()
             loc.enter()
             self.log.add_event(Event(cur, loc.long_description), command)
+            self.check_lose()
         elif command in self.menu:
             if command == 'look':
                 self.menu_look()
@@ -167,6 +171,8 @@ class AdventureGame:
                 self.menu_log()
             elif command == 'quit':
                 self.menu_quit()
+            elif command == 'step':
+                self.menu_step()
         elif command in self.interactions:
             if command == 'take':
                 self.interact_take()
@@ -222,6 +228,11 @@ class AdventureGame:
         print("Quit")
         self.ongoing = False
 
+    def menu_step(self):
+        """Return the total step of player"""
+        print("Currentstep: " + str(self.currstep))
+        print("Maximum step: " + str(self.maxstep))
+
     def interact_take(self) -> None:
         """Take an item from current location and add to inventory."""
         loc = self.get_location()
@@ -239,7 +250,7 @@ class AdventureGame:
             loc.remove_item(item_name)
             self.inventory.append(item_obj)
             print(f"You picked up {item_name}.")
-            #给出target_position的名字
+            # 给出target_position的名字
             target_loc = self.get_location(item_obj.target_position)
             print("You can use this item in " + target_loc.name + " to gain " + str(item_obj.target_points) + " points.")
 
@@ -276,6 +287,7 @@ class AdventureGame:
             # 记录事件
             self.log.add_event(Event(self.current_location_id, self.get_location().long_description),
                                command=f"use {item_name}")
+            self.check_win()
         else:
             print("Item not found in inventory.")
 
@@ -302,6 +314,20 @@ class AdventureGame:
             Event(loc.id_num, loc.long_description),
             command=f"drop {item_name}"
         )
+
+    def check_win(self) -> None:
+        """Check if the player reach the score"""
+        if self.score >= self.win_score:
+            print("You win the game! :>")
+            self.ongoing = False
+
+    def check_lose(self) -> None:
+        """Check if the player lose the game"""
+        # currstep + 1 when player move
+        self.currstep += 1
+        if self.currstep >= self.maxstep:
+            print("Sorry, you lose the game! :<")
+            self.ongoing = False
 
 
 if __name__ == "__main__":
