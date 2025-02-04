@@ -85,7 +85,7 @@ class AdventureGame:
         # Suggested helper method (you can remove and load these differently if you wish to do so):
         self._locations, self._items = self._load_game_data(game_data_file)
         self.log = EventList()
-        self.menu = ['look', 'inventory', 'score', 'undo', 'log', 'quit']
+        self.menu = ['look', 'inventory', 'score', 'undo', 'log', 'quit', 'step']
         self.interactions = ['take', 'drop', 'use']
         self.inventory = []
         self.current_location_id = initial_location_id  # game begins at this location
