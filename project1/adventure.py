@@ -167,6 +167,7 @@ class AdventureGame:
                 self.menu_score()
             elif command == 'undo':
                 self.menu_undo()
+                self.currstep -= 1
             elif command == 'log':
                 self.menu_log()
             elif command == 'quit':
@@ -229,9 +230,8 @@ class AdventureGame:
         self.ongoing = False
 
     def menu_step(self):
-        """Return the total step of player"""
-        print("Currentstep: " + str(self.currstep))
-        print("Maximum step: " + str(self.maxstep))
+        """Return the remaining step of player"""
+        print("Remaining steps: " + str(self.maxstep - self.currstep))
 
     def interact_take(self) -> None:
         """Take an item from current location and add to inventory."""
@@ -344,7 +344,7 @@ if __name__ == "__main__":
     # AdventureGame 中有一个 EventList 类，用于存储游戏的事件日志
     #game_log = EventList()  # This is REQUIRED as one of the baseline requirements
     game = AdventureGame('game_data.json', 1)  # load data, setting initial location ID to 1
-    # menu = ["look", "inventory", "score", "undo", "log", "quit", "step"]  # Regular menu options available at each location
+    menu = ["look", "inventory", "score", "undo", "log", "quit", "step"]  # Regular menu options available at each location
     choice = None
 
     # Note: You may modify the code below as needed; the following starter code is just a suggestion
