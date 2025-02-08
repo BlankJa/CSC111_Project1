@@ -15,7 +15,7 @@
             "id": 2,
             "name": "Bahen 2F",
             "brief_description": "Second floor of Bahen Center.",
-            "long_description": "A quieter study space than the first floor, ideal for focused work.",
+            "long_description": "Second floor of Bahen Center. A quieter study space than the first floor, ideal for focused work.",
             "available_commands": {
                 "go south": 1,
                 "go north": 3
@@ -28,7 +28,7 @@
             "id": 3,
             "name": "Bahen 3F",
             "brief_description": "Third floor of Bahen Center.",
-            "long_description": "Dedicated to research and collaborative projects.",
+            "long_description": "Third floor of Bahen Center. Dedicated to research and collaborative projects.",
             "available_commands": {
                 "go south": 2,
                 "go east": 5
@@ -51,7 +51,7 @@
             "id": 5,
             "name": "Robarts Library",
             "brief_description": "The largest library on campus.",
-            "long_description": "Towering bookshelves filled with knowledge surround the study desks.",
+            "long_description": "You arrive Robarts Library, the largest library on campus. Towering bookshelves filled with knowledge surround the study desks.",
             "available_commands": {
                 "go west": 3,
                 "go north": 6
@@ -75,7 +75,7 @@
             "id": 7,
             "name": "Tim Hortons",
             "brief_description": "A coffee shop popular among students.",
-            "long_description": "A great place to grab a coffee before heading to class.",
+            "long_description": "You arrive Tim Hortons, a coffee shop popular among students. It's a great place to grab a coffee before heading to class.",
             "available_commands": {
                 "go south": 4,
                 "go east": 8
@@ -88,7 +88,7 @@
             "id": 8,
             "name": "King\u2019s College Circle",
             "brief_description": "A scenic outdoor space.",
-            "long_description": "A green and peaceful space at the heart of campus.",
+            "long_description": "Popular King\u2019s College Circle, a green and peaceful space at the heart of campus.",
             "available_commands": {
                 "go west": 7,
                 "go north": 12,
@@ -100,7 +100,7 @@
             "id": 9,
             "name": "Sidney Smith Hall",
             "brief_description": "A bustling academic building.",
-            "long_description": "Students gather here for lectures and discussions.",
+            "long_description": "Here is Sidney Smith Hall, students gather here for lectures and discussions.",
             "available_commands": {
                 "go east": 1,
                 "go north": 8,
@@ -114,7 +114,7 @@
             "id": 10,
             "name": "Hart House",
             "brief_description": "A cultural and arts center.",
-            "long_description": "A peaceful retreat with art, music, and student events.",
+            "long_description": "Here is Hart House, cultural and arts center, a peaceful retreat with art, music, and student events.",
             "available_commands": {
                 "go east": 6,
                 "go south": 11
@@ -125,7 +125,7 @@
             "id": 11,
             "name": "UofT Bookstore",
             "brief_description": "A shop for textbooks and merchandise.",
-            "long_description": "Find all your academic needs and UofT apparel here.",
+            "long_description": "Welcome to UofT Bookstore, find all your academic needs and UofT apparel here. There seems to be something special here.",
             "available_commands": {
                 "go north": 10,
                 "go east": 9
@@ -138,7 +138,7 @@
             "id": 12,
             "name": "Science Research Building",
             "brief_description": "A research hub.",
-            "long_description": "Labs and research spaces filled with eager students and professors.",
+            "long_description": "Here is Science Research Building, labs and research spaces filled with eager students and professors.",
             "available_commands": {
                 "go south": 8
             },
@@ -153,21 +153,27 @@
             "description": "The USB drive containing your project.",
             "start_position": 9,
             "target_position": 4,
-            "target_points": 10
+            "target_points": 10,
+            "pick_up_conditions": [
+                "lab_key"
+            ]
         },
         {
             "name": "laptop_charger",
             "description": "Your missing laptop charger.",
             "start_position": 5,
             "target_position": 4,
-            "target_points": 7
+            "target_points": 7,
+            "pick_up_conditions": [
+                "library_card"
+            ]
         },
         {
             "name": "coffee",
             "description": "A hot cup of coffee from Tim Hortons.",
             "start_position": 7,
             "target_position": 8,
-            "target_points": 2
+            "target_points": 1
         },
         {
             "name": "notebook",

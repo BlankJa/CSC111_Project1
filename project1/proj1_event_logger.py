@@ -123,7 +123,8 @@ class EventList:
         if self.is_empty():
             return None
         lastevent = None
-        if "take" or "drop" or "use" in self.last.prev.next_command:
+        if self.last.prev.next_command and any(cmd in self.last.prev.next_command for cmd in ["take", "drop", "use"]):
+        # if "take" or "drop" or "use" in self.last.prev.next_command:
             lastevent = self.last.prev.next_command
 
         self.last = self.last.prev

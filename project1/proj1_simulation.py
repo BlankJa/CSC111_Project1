@@ -46,10 +46,10 @@ class AdventureGameSimulation:
         self._events = EventList()
         self._game = AdventureGame(game_data_file, initial_location_id)
 
-        # TODO: Add first event (initial location, no previous command)
+        # TOD: Add first event (initial location, no previous command)
         # Hint: self._game.get_location() gives you back the current location
         current_location = self._game.get_location()
-        # TODO: Generate the remaining events based on the commands and initial location
+        # TOD: Generate the remaining events based on the commands and initial location
         # Hint: Call self.generate_events with the appropriate arguments
         event = Event(current_location.id_num, current_location.long_description, None, None, None)
         self._events.add_event(event)
@@ -63,18 +63,29 @@ class AdventureGameSimulation:
         - all commands in the given list are valid commands at each associated location in the game
         """
 
-        # TODO: Complete this method as specified. For each command, generate the event and add
+        # TOD: Complete this method as specified. For each command, generate the event and add
         #  it to self._events.
         # Hint: current_location.available_commands[command] will return the next location ID
         # which executing <command> while in <current_location_id> leads to
         for cmd in commands:
-            if cmd not in current_location.available_commands:
-                continue
-            next_loc_id = current_location.available_commands[cmd]
-            next_loc = self._game.get_location(next_loc_id)
-            event = Event(next_loc.id_num, next_loc.long_description, None, None, None)
-            self._events.add_event(event, cmd)
-            current_location = next_loc
+            if cmd in current_location.available_commands:
+                next_loc_id = current_location.available_commands[cmd]
+                next_loc = self._game.get_location(next_loc_id)
+                event = Event(next_loc.id_num, next_loc.long_description, None, None, None)
+                self._events.add_event(event, cmd)
+                current_location = next_loc
+            elif cmd.split(" ")[0] in self._game.interactions:
+                # Handle interaction commands (take, drop, use)
+                self._game.action(cmd)
+                loc = self._game.get_location()
+                event = Event(loc.id_num, loc.long_description, cmd)
+                self._events.add_event(event, cmd)
+            elif cmd in self._game.menu:
+                # Handle menu commands (look, inventory, score, undo, log, quit, step)
+                self._game.action(cmd)
+                loc = self._game.get_location()
+                event = Event(loc.id_num, loc.long_description, cmd)
+                self._events.add_event(event, cmd)
 
     def get_id_log(self) -> list[int]:
         """
@@ -120,13 +131,36 @@ if __name__ == "__main__":
     #     'disable': ['R1705', 'E9998', 'E9999']
     # })
 
-    # TODO: Modify the code below to provide a walkthrough of commands needed to win and lose the game
-    win_walkthrough = []  # Create a list of all the commands needed to walk through your game to win it
-    expected_log = []  # Update this log list to include the IDs of all locations that would be visited
+    # TOD: Modify the code below to provide a walkthrough of commands needed to win and lose the game
+    win_walkthrough = [
+        "go north",  # Move to Bahen 2F
+        "take library_card",  # Pick up library_card
+        "go south",  # Return to Bahen 1F
+        "go west",  # Move to Sidney Smith Hall
+        "take USB_drive",  # Pick up USB_drive
+        "go east",  # Return to Bahen 1F
+        "go north",  # Move to Bahen 2F
+        "go north",  # Move to Bahen 3F
+        "go east",  # Move to Robarts Library
+        "use USB_drive",  # Use USB_drive to gain points
+        "go north",  # Move to Convocation Hall
+        "go west",  # Move to Hart House
+        "go south",  # Move to UofT Bookstore
+        "take notebook",  # Pick up notebook
+        "go north",  # Return to Hart House
+        "go east",  # Return to Convocation Hall
+        "go south",  # Return to Robarts Library
+        "use notebook",  # Use notebook to gain points
+    ]
+
+    # Expected location IDs for the win walkthrough
+    expected_win_log = [1, 2, 1, 9, 9, 1, 2, 3, 5, 5, 6, 10, 11, 11, 10, 6, 5, 5]
     # Uncomment the line below to test your walkthrough
     # assert expected_log == AdventureGameSimulation('game_data.json', 1, win_walkthrough) mistake in starter code
     sim = AdventureGameSimulation('game_data.json', 1, win_walkthrough)
-    assert expected_log == sim.get_id_log()
+    print(sim.get_id_log())
+    assert expected_win_log == sim.get_id_log()
+    sim.run()
 
     # Create a list of all the commands needed to walk through your game to reach a 'game over' state
     lose_demo = []

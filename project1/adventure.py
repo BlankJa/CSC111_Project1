@@ -118,7 +118,9 @@ class AdventureGame:
         # TOD: Add Item objects to the items list; your code should be structured similarly to the loop above
         # YOUR CODE BELOW
         for item in data['items']:
-            item_obj = Item(item['name'], item['description'], item['start_position'], item['target_position'], item['target_points'])
+            item_obj = Item(item['name'], item['description'], 
+                            item['start_position'], item['target_position'], 
+                            item['target_points'], item.get('pick_up_conditions', []))
             items.append(item_obj)
         return locations, items
 
@@ -153,38 +155,51 @@ class AdventureGame:
         print("========")
         print("You decided to:", command)
         if command in loc.available_commands:
-            self.current_location_id = cur = loc.available_commands[command]
-            loc = self.get_location()
-            loc.enter()
-            self.log.add_event(Event(cur, loc.long_description), command)
-            self.check_lose()
+            self._handle_movement(command)
         elif command in self.menu:
-            if command == 'look':
-                self.menu_look()
-            elif command == 'inventory':
-                self.menu_inventory()
-            elif command == 'score':
-                self.menu_score()
-            elif command == 'undo':
-                if self.currstep == 0:
-                    print("You have not moved yet!")
-                    return True
-                self.menu_undo()
-                self.currstep -= 1
-            elif command == 'log':
-                self.menu_log()
-            elif command == 'quit':
-                self.menu_quit()
-            elif command == 'step':
-                self.menu_step()
-        elif command in self.interactions:
-            if command == 'take':
-                self.interact_take()
-            elif command == 'drop':
-                self.interact_drop()
-            elif command == 'use':
-                self.interact_use()
+            self._handle_menu_command(command)
+        elif command.split(" ")[0] in self.interactions:
+            if len(command.split(" ")) != 2:
+                cmd, item_name = command, None
+            else:
+                cmd, item_name = command.split(" ")
+            self._handle_interaction(cmd, item_name)
         return True
+    
+    def _handle_movement(self, command: str) -> None:
+        """Handle movement commands."""
+        loc = self.get_location()
+        self.current_location_id = loc.available_commands[command]
+        new_loc = self.get_location()
+        new_loc.enter()
+        self.log.add_event(Event(self.current_location_id, new_loc.long_description), command)
+        self.check_lose()
+
+    def _handle_menu_command(self, command: str) -> None:
+        """Handle menu commands."""
+        if command == 'look':
+            self.menu_look()
+        elif command == 'inventory':
+            self.menu_inventory()
+        elif command == 'score':
+            self.menu_score()
+        elif command == 'undo':
+            self.menu_undo()
+        elif command == 'log':
+            self.menu_log()
+        elif command == 'quit':
+            self.menu_quit()
+        elif command == 'step':
+            self.menu_step()
+
+    def _handle_interaction(self, command: str, item_name: str) -> None:
+        """Handle interaction commands."""
+        if command == 'take':
+            self.interact_take(item_name)
+        elif command == 'drop':
+            self.interact_drop()
+        elif command == 'use':
+            self.interact_use()
 
     def menu_look(self) -> None:
         """output the full description of the current location."""
@@ -193,6 +208,10 @@ class AdventureGame:
     def menu_inventory(self):
         """output the player's inventory."""
         # print("Inventory: " + str(self.inventory))
+        print("Inventory: " + str([item.name for item in self.inventory]))
+
+    def menu_inventory_simple(self):
+        """output the player's inventory in a simple format."""
         print("Inventory: " + str([item.name for item in self.inventory]))
 
     def menu_score(self):
@@ -213,7 +232,7 @@ class AdventureGame:
         lastevent = self.log.remove_last_event()
         if lastevent:
             target_object = self.get_item_obj(lastevent.split(' ', 1)[-1])
-            # 撤销 take
+            # undo take
             if "take" in lastevent:
                 self.inventory.remove(target_object)
                 self.get_location().add_item(target_object.name)
@@ -236,20 +255,25 @@ class AdventureGame:
         """Return the remaining step of player"""
         print("Remaining steps: " + str(self.maxstep - self.currstep))
 
-    def interact_take(self) -> None:
+    def interact_take(self, item_name: Optional[str]=None) -> None:
         """Take an item from current location and add to inventory."""
         loc = self.get_location()
         if not loc.items:
             print("There are no items to pick up here.")
             return
         print("Available items:", loc.items)
-        item_name = input("Enter item name (or 'cancel' to abort): ").strip()
+        if item_name is None:
+            item_name = input("Enter item name (or 'cancel' to abort): ").strip()
         if item_name == 'cancel':
             return
 
         item_obj = self.get_item_obj(item_name)
 
         if item_obj and item_name in loc.items:
+            if not item_obj.can_pick_up([item.name for item in self.inventory]):
+                print("You cannot pick up this item.")
+                print("You need to get " + str(item_obj.pick_up_conditions))
+                return
             loc.remove_item(item_name)
             self.inventory.append(item_obj)
             print(f"You picked up {item_name}.")
@@ -300,7 +324,7 @@ class AdventureGame:
             print("Inventory is empty, failed to drop.")
             return
         print("Available items:", [item.name for item in self.inventory])
-        item_name = input("Enter item name to drop (or 'cancel'): ").strip()
+        item_name = input("Enter item name to drop (or 'cancel'): ").strip().lower()
         if item_name == "cancel":
             return
         elif item_name not in [item.name for item in self.inventory]:

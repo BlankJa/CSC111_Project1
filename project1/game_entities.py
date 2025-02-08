@@ -18,8 +18,7 @@ please consult our Course Syllabus.
 
 This file is Copyright (c) 2025 CSC111 Teaching Team
 """
-from dataclasses import dataclass
-
+from dataclasses import dataclass, field
 
 @dataclass
 class Item:
@@ -31,7 +30,8 @@ class Item:
         - description: description of item
         - start_position: start position of item
         - target_position: target position of item
-        - target_points: target points of item
+        - target_points: target points of item\
+        - picked_up_conditions: a list of conditions that must be met to pick up the item
 
     Representation Invariants:
         - # TOD Describe any necessary representation invariants
@@ -52,6 +52,15 @@ class Item:
     start_position: int
     target_position: int
     target_points: int
+    pick_up_conditions: list[str] = field(default_factory=list)
+
+    # judge whether this item can be picked up
+    def can_pick_up(self, inventory: list[str]) -> bool:
+        """Return whether this item can be picked up."""
+        for cond in self.pick_up_conditions:
+            if cond not in inventory:
+                return False
+        return True
 
 
 @dataclass
