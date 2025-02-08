@@ -26,9 +26,6 @@ from dataclasses import dataclass
 from typing import Optional
 
 
-# TOD: Copy/paste your ex1_event_logger code below, and modify it if needed to fit your game
-
-
 @dataclass
 class Event:
     """
@@ -42,16 +39,8 @@ class Event:
     - prev: Event object representing the previous event in the game, None if this is the first game event
     """
 
-    # NOTES:
-    # This is proj1_event_logger (separate from the ex1 file). In this file, you may add new attributes/methods,
-    # or modify the names or types of provided attributes/methods, as needed for your game.
-    # If you want to create a special type of Event for your game that requires a different
-    # set of attributes, you can create new classes using inheritance, as well.
-
-    # TOD: Add attributes below based on the provided descriptions above.
     id_num: int
     description: str
-    # Optional[x] = Union[x, None]
     next_command: Optional[str] = None
     next: Optional[Event] = None
     prev: Optional[Event] = None
@@ -82,19 +71,14 @@ class EventList:
 
     def display_events(self) -> None:
         """Display all events in chronological order."""
-        # print("Display")
         curr = self.first
-        # print(curr)
         while curr:
             print(f"Location: {curr.id_num}, Command: {curr.next_command}")
             curr = curr.next
 
-    # TOD: Complete the methods below, based on the given descriptions. Do NOT change any of their specification.
-    #  That is, the function headers (parameters, return type, etc.) must NOT be changed.
     def is_empty(self) -> bool:
         """Return whether this event list is empty."""
 
-        # TOD: Your code below
         return self.first is None
 
     def add_event(self, event: Event, command: Optional[str] = None) -> None:
@@ -102,9 +86,6 @@ class EventList:
         The given command is the command which was used to reach this new event, or None if this is the first
         event in the game.
         """
-        # Hint: You should update the previous node's <next_command> as needed
-
-        # TOD: Your code below
         if self.is_empty():
             self.first = self.last = event
             return
@@ -116,15 +97,10 @@ class EventList:
     def remove_last_event(self) -> Optional[str]:
         """Remove the last event from this event list.
         If the list is empty, do nothing."""
-
-        # Hint: The <next_command> and <next> attributes for the new last event should be updated as needed
-
-        # TOD: Your code below
         if self.is_empty():
             return None
         lastevent = None
         if self.last.prev.next_command and any(cmd in self.last.prev.next_command for cmd in ["take", "drop", "use"]):
-        # if "take" or "drop" or "use" in self.last.prev.next_command:
             lastevent = self.last.prev.next_command
 
         self.last = self.last.prev
@@ -134,17 +110,15 @@ class EventList:
 
     def get_id_log(self) -> list[int]:
         """Return a list of all location IDs visited for each event in this list, in sequence."""
-
-        # TOD: Your code below
         ids = []
         curr = self.first
         while curr:
             ids.append(curr.id_num)
             curr = curr.next
         return ids
-    # Note: You may add other methods to this class as needed
 
     def get_last_event_id(self) -> int:
+        """Return the id of the last event in the list, or -1 if the list is empty."""
         if self.is_empty():
             return -1
         return self.last.id_num
