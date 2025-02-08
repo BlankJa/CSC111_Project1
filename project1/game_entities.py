@@ -19,6 +19,7 @@ please consult our Course Syllabus.
 This file is Copyright (c) 2025 CSC111 Teaching Team
 """
 from dataclasses import dataclass, field
+from typing import Optional
 
 @dataclass
 class Item:
@@ -93,16 +94,30 @@ class Location:
     long_description: str
     available_commands: dict[str, int]
     items: list[str]
+    question_id: Optional[int] = None
     visited: bool = False
 
     # 进入场景
-    def enter(self) -> None:
+    def enter(self, output:bool) -> None:
         """Enter this location."""
-        if self.visited:
-            print(self.brief_description)
-        else:
-            print(self.long_description)
-            self.visited = True
+        description = self.brief_description
+        if not self.visited:
+            description = self.long_description
+            # self.visited = True
+        if output:
+            print(description)
+    
+    def answer_question(self, output:bool, answer:Optional[str]=None) -> bool:
+        """
+        Display the question of this location and 
+        check if the user's answer is correct.
+        """
+        if self.question_id is None or self.visited:
+            return True
+        question = question_bank.get_question(self.question_id)
+        if output:
+            question.display()
+        return question.check_answer(answer)
     
     def remove_item(self, item_name: str):
         """Remove item from this location."""
@@ -112,6 +127,49 @@ class Location:
         """Add item to this location."""
         self.items.append(item_name)
 
+
+@dataclass
+class Question:
+    """A question in our text adventure game world.
+    Instance Attributes:
+        - # TOD Describe each instance attribute here
+        - description: description
+        - options: options
+        - answer: answer
+    """
+    description: str
+    options: list[str]
+    answer: str
+
+    def display(self) -> None:
+        """Display this question."""
+        print(self.description)
+        for i, option in enumerate(self.options, start=65):
+            print(f"{chr(i)}. {option}")
+    
+    def check_answer(self, answer: Optional[str]=None) -> bool:
+        """Check if the user's answer is correct."""
+        if answer is None:
+            answer = input("Your answer: ")
+        return answer.lower() == self.answer
+
+
+@dataclass
+class QuestionBank:
+    """A bank of questions in our text adventure game world.
+    Instance Attributes:
+        - questions: a list of questions
+    """
+    questions: list[Question] = field(default_factory=list)
+    def get_question(self, index: int) -> Question:
+        """Get the question at the given index."""
+        return self.questions[index]
+    
+    def add_questions(self, questions: list[Question]) -> None:
+        """Add questions to the bank."""
+        self.questions.extend(questions)
+
+question_bank = QuestionBank()
 
 # Note: Other entities you may want to add, depending on your game plan:
 # - Puzzle class to represent special locations (could inherit from Location class if it seems suitable)

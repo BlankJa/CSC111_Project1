@@ -22,7 +22,8 @@
             },
             "items": [
                 "library_card"
-            ]
+            ],
+            "question_id": 0
         },
         {
             "id": 3,
@@ -58,7 +59,8 @@
             },
             "items": [
                 "laptop_charger"
-            ]
+            ],
+            "question_id": 1
         },
         {
             "id": 6,
@@ -180,7 +182,7 @@
             "description": "A notebook from the UofT Bookstore. Something surprise will happen if you bring it to the right place.",
             "start_position": 11,
             "target_position": 5,
-            "target_points": 10000
+            "target_points": 1000
         },
         {
             "name": "library_card",
@@ -202,6 +204,33 @@
             "start_position": 4,
             "target_position": 4,
             "target_points": 8
+        }
+    ],
+    "questions": [
+        {
+            "description": "What has to be broken before you can use it?",
+            "options": ["A window", "An egg", "A phone", "A door"],
+            "answer": "b"
+        },
+        {
+            "description": "I have hands but cannot clap. What am I?",
+            "options": ["A robot", "A statue", "A clock", "A mannequin"],
+            "answer": "c"
+        },
+        {
+            "description": "The more of me you take, the more you leave behind. What am I?",
+            "options": ["Footsteps", "Memories", "Time", "Money"],
+            "answer": "a"
+        },
+        {
+            "description": "What has a head, a tail, but no body?",
+            "options": ["A worm", "A coin", "A snake", "A shadow"],
+            "answer": "b"
+        },
+        {
+            "description": "What comes once in a minute, twice in a moment, but never in a thousand years?",
+            "options": ["A clock", "The letter 'M'", "A flash", "An idea"],
+            "answer": "b"
         }
     ]
 }
