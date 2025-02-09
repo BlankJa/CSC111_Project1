@@ -52,7 +52,6 @@ class AdventureGame:
     """A text adventure game class storing all location, item and map data.
 
     Instance Attributes:
-        - # TOD add descriptions of public instance attributes as needed
         - _locations: dict of Location objects representing the locations in the game
         - _items: list of Item objects representing the items in the game
         - menu: list of strings representing the menu options
@@ -63,7 +62,6 @@ class AdventureGame:
         - log: EventList object representing the game log
 
     Representation Invariants:
-        - # TOD add any appropriate representation invariants as needed
         - current_location_id in _locations
     """
 
@@ -181,11 +179,11 @@ class AdventureGame:
         self._display("You decided to:", command)
         if command in loc.available_commands:
             self._handle_movement(command, answer)
+            self.check_lose()
         elif command in self.menu:
             self._handle_menu_command(command)
         elif command in self.interactions:
             self._handle_interaction(command, item_name)
-        self.check_lose()
         return True
 
     def _is_interact_cmd(self, command: str) -> bool:
@@ -204,7 +202,6 @@ class AdventureGame:
             self.menu_undo()
         else:
             new_loc.visited = True
-
 
     def _handle_menu_command(self, command: str) -> None:
         """Handle menu commands."""

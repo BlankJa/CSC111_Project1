@@ -27,7 +27,6 @@ class Item:
     """An item in our text adventure game world.
 
     Instance Attributes:
-        - # TOD Describe each instance attribute here
         - name: name of item
         - description: description of item
         - start_position: start position of item
@@ -36,18 +35,9 @@ class Item:
         - picked_up_conditions: a list of conditions that must be met to pick up the item
 
     Representation Invariants:
-        - # TOD Describe any necessary representation invariants
         - start_position != target_position
         - target_points > 0
     """
-
-    # NOTES:
-    # This is just a suggested starter class for Item.
-    # You may change these parameters and the data available for each Item object as you see fit.
-    # (The current parameters correspond to the example in the handout).
-    #
-    # The only thing you must NOT change is the name of this class: Item.
-    # All item objects in your game MUST be represented as an instance of this class.
 
     name: str
     description: str
@@ -70,7 +60,6 @@ class Location:
     """A location in our text adventure game world.
 
     Instance Attributes:
-        - # TOD Describe each instance attribute here
         - id_num: int id
         - brief_description: brief description
         - long_description: long description
@@ -79,7 +68,6 @@ class Location:
         - visited: a boolean indicating whether this location has been visited
 
     Representation Invariants:
-        - # TOD Describe any necessary representation invariants
         - available_commands != {}
     """
 
@@ -132,7 +120,6 @@ class Location:
 class Question:
     """A question in our text adventure game world.
     Instance Attributes:
-        - # TOD Describe each instance attribute here
         - description: description
         - options: options
         - answer: answer
