@@ -21,11 +21,13 @@ This file is Copyright (c) 2025 CSC111 Teaching Team
 from dataclasses import dataclass, field
 from typing import Optional
 
+
 @dataclass
 class Item:
     """An item in our text adventure game world.
 
     Instance Attributes:
+        - # TOD Describe each instance attribute here
         - name: name of item
         - description: description of item
         - start_position: start position of item
@@ -34,6 +36,7 @@ class Item:
         - picked_up_conditions: a list of conditions that must be met to pick up the item
 
     Representation Invariants:
+        - # TOD Describe any necessary representation invariants
         - start_position != target_position
         - target_points > 0
     """
@@ -67,16 +70,16 @@ class Location:
     """A location in our text adventure game world.
 
     Instance Attributes:
+        - # TOD Describe each instance attribute here
         - id_num: int id
-        - name: name of location
         - brief_description: brief description
         - long_description: long description
         - available_commands: a mapping of available commands
         - items: a list of item names
         - visited: a boolean indicating whether this location has been visited
-        - question_id: the id of the question in this location
 
     Representation Invariants:
+        - # TOD Describe any necessary representation invariants
         - available_commands != {}
     """
 
@@ -94,19 +97,19 @@ class Location:
     items: list[str]
     question_id: Optional[int] = None
     visited: bool = False
-    
 
-    def enter(self, output:bool) -> None:
+    # 进入场景
+    def enter(self, output: bool) -> None:
         """Enter this location."""
         description = self.brief_description
         if not self.visited:
             description = self.long_description
         if output:
             print(description)
-    
-    def answer_question(self, output:bool, answer:Optional[str]=None) -> bool:
+
+    def answer_question(self, output: bool, answer: Optional[str] = None) -> bool:
         """
-        Display the question of this location and 
+        Display the question of this location and
         check if the user's answer is correct.
         """
         if self.question_id is None or self.visited:
@@ -115,11 +118,11 @@ class Location:
         if output:
             question.display()
         return question.check_answer(answer)
-    
-    def remove_item(self, item_name: str):
+
+    def remove_item(self, item_name: str) -> None:
         """Remove item from this location."""
         self.items.remove(item_name)
-    
+
     def add_item(self, item_name: str) -> None:
         """Add item to this location."""
         self.items.append(item_name)
@@ -143,8 +146,8 @@ class Question:
         print(self.description)
         for i, option in enumerate(self.options, start=65):
             print(f"{chr(i)}. {option}")
-    
-    def check_answer(self, answer: Optional[str]=None) -> bool:
+
+    def check_answer(self, answer: Optional[str] = None) -> bool:
         """Check if the user's answer is correct."""
         if answer is None:
             answer = input("Your answer: ")
@@ -158,21 +161,17 @@ class QuestionBank:
         - questions: a list of questions
     """
     questions: list[Question] = field(default_factory=list)
+
     def get_question(self, index: int) -> Question:
         """Get the question at the given index."""
         return self.questions[index]
-    
+
     def add_questions(self, questions: list[Question]) -> None:
         """Add questions to the bank."""
         self.questions.extend(questions)
 
 
 question_bank = QuestionBank()
-
-# Note: Other entities you may want to add, depending on your game plan:
-# - Puzzle class to represent special locations (could inherit from Location class if it seems suitable)
-# - Player class
-# etc.
 
 if __name__ == "__main__":
     # pass

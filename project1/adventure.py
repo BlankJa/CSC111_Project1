@@ -205,6 +205,7 @@ class AdventureGame:
         else:
             new_loc.visited = True
 
+
     def _handle_menu_command(self, command: str) -> None:
         """Handle menu commands."""
         if command == 'look':
@@ -237,6 +238,10 @@ class AdventureGame:
 
     def menu_inventory(self) -> None:
         """output the player's inventory."""
+        self._display("Inventory: " + str([item.name for item in self.state.inventory]))
+
+    def menu_inventory_simple(self) -> None:
+        """output the player's inventory in a simple format."""
         self._display("Inventory: " + str([item.name for item in self.state.inventory]))
 
     def menu_score(self) -> None:
