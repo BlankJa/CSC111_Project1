@@ -25,6 +25,7 @@ from typing import Optional
 from dataclasses import dataclass, field
 from game_entities import Location, Item, Question, question_bank
 from proj1_event_logger import Event, EventList
+from project1.game_entities import LocationDescription
 
 
 @dataclass
@@ -97,7 +98,8 @@ class AdventureGame:
         self.state.output = output
         self.get_location().enter(self.state.output)
         self.log = EventList()
-        self.log.add_event(Event(initial_location_id, self.get_location(initial_location_id).long_description))
+        self.log.add_event(Event(initial_location_id,
+                                 self.get_location(initial_location_id).description.long_description))
 
     @staticmethod
     def _load_game_data(filename: str) -> tuple[dict[int, Location], list[Item], list[Question]]:
@@ -114,9 +116,10 @@ class AdventureGame:
 
         locations = {}
         for loc_data in data['locations']:  # Go through each element associated with the 'locations' key in the file
-            location_obj = Location(loc_data['id'], loc_data['name'], loc_data['brief_description'],
-                                    loc_data['long_description'], loc_data['available_commands'],
-                                    loc_data['items'], loc_data.get('question_id', None))
+            location_description = LocationDescription(loc_data['brief_description'], loc_data['long_description'])
+            location_obj = Location(loc_data['id'], loc_data['name'], loc_data['available_commands'],
+                                    loc_data['items'], loc_data.get('question_id', None),
+                                    location_description)
             locations[loc_data['id']] = location_obj
 
         items = []
@@ -196,7 +199,7 @@ class AdventureGame:
         self.current_location_id = loc.available_commands[command]
         new_loc = self.get_location()
         new_loc.enter(self.state.output)
-        self.log.add_event(Event(self.current_location_id, new_loc.long_description), command)
+        self.log.add_event(Event(self.current_location_id, new_loc.description.long_description), command)
         if not new_loc.answer_question(self.state.output, answer):
             self._display("Wrong answer!", end=" ")
             self.menu_undo()
@@ -231,7 +234,7 @@ class AdventureGame:
 
     def menu_look(self) -> None:
         """output the full description of the current location."""
-        self._display(self.get_location().long_description)
+        self._display(self.get_location().description.long_description)
 
     def menu_inventory(self) -> None:
         """output the player's inventory."""
@@ -310,7 +313,7 @@ class AdventureGame:
                 self._display(f"Delivered {item_name}! +{item_obj.target_points} points!")
 
             self.log.add_event(
-                Event(loc.id_num, loc.long_description),
+                Event(loc.id_num, loc.description.long_description),
                 command=f"take {item_name}"
             )
         else:
@@ -336,7 +339,7 @@ class AdventureGame:
                 self.state.inventory.remove(item_to_use)
             else:
                 self._display("This item cannot be used here.")
-            self.log.add_event(Event(self.current_location_id, self.get_location().long_description),
+            self.log.add_event(Event(self.current_location_id, self.get_location().description.long_description),
                                command=f"use {item_name}")
             self.check_win()
         else:
@@ -363,7 +366,7 @@ class AdventureGame:
         self._display(f"You dropped {item_name}.")
 
         self.log.add_event(
-            Event(loc.id_num, loc.long_description),
+            Event(loc.id_num, loc.description.long_description),
             command=f"drop {item_name}"
         )
 
@@ -426,11 +429,11 @@ if __name__ == "__main__":
     # When you are ready to check your work with python_ta, uncomment the following lines.
     # (Delete the "#" and space before each line.)
     # IMPORTANT: keep this code indented inside the "if __name__ == '__main__'" block
-    # import python_ta
-    # python_ta.check_all(config={
-    #     'max-line-length': 120,
-    #     'disable': ['R1705', 'E9998', 'E9999']
-    # })
+    import python_ta
+    python_ta.check_all(config={
+        'max-line-length': 120,
+        'disable': ['R1705', 'E9998', 'E9999']
+    })
 
     game = AdventureGame('game_data.json', 1)  # load data, setting initial location ID to 1
     game.run()

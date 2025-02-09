@@ -56,13 +56,24 @@ class Item:
 
 
 @dataclass
+class LocationDescription:
+    """Description of a location.
+
+    Instance Attributes:
+        - brief_description: brief description
+        - long_description: long description
+    """
+
+    brief_description: str
+    long_description: str
+
+
+@dataclass
 class Location:
     """A location in our text adventure game world.
 
     Instance Attributes:
         - id_num: int id
-        - brief_description: brief description
-        - long_description: long description
         - available_commands: a mapping of available commands
         - items: a list of item names
         - visited: a boolean indicating whether this location has been visited
@@ -79,19 +90,18 @@ class Location:
 
     id_num: int
     name: str
-    brief_description: str
-    long_description: str
     available_commands: dict[str, int]
     items: list[str]
     question_id: Optional[int] = None
+    description: LocationDescription = field(default_factory=LocationDescription)
     visited: bool = False
 
     # 进入场景
     def enter(self, output: bool) -> None:
         """Enter this location."""
-        description = self.brief_description
+        description = self.description.brief_description
         if not self.visited:
-            description = self.long_description
+            description = self.description.long_description
         if output:
             print(description)
 
