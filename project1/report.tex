@@ -13,7 +13,7 @@
 \maketitle
 
 \section*{Running the game}
-We should be able to run your game by simply running \texttt{adventure.py}. 
+We should be able to run your game by simply running \texttt{adventure.py}.
 Ensure all the necessary files are in the same directory:
 \begin{itemize}
     \item \texttt{adventure.py}
@@ -80,56 +80,87 @@ List of commands:
 
 \section*{Lose condition(s)}
 Description of how to lose the game:
+In the dataclass Gamestate of adventure.py file, "currstep" variable greater or equal than "maxstep" varible
 
 List of commands:
+[1, 2, 2, 3, 5, 5, 6, 10, 11, 11, 9, 8, 7, 7, 8, 8, 12, 12, 8, 9, 9, 1, 9, 9, 9, 8, 12, 8, 9]
 
 Which parts of your code are involved in this functionality:
-
-% Copy-paste the above if you have multiple lose conditions and describe each possible way to lose the game
+In adventure.py file, when the player move 1 step(action method), the method "check\_lose" will be run. Whenever  "check\_lose" be run,  "currstep" will be added 1 and there is a if statement to check if "currstep" bigger or equal to maxstep. If yes, '\_display' will be run and print "Sorry, you lose the game! :<", "ongoing" become False and the game end.
 
 \section*{Inventory}
 
 \begin{enumerate}
 \item All location IDs that involve items in the game:
-
+[9,5,7,11,2,12,4]
 \item Item data:
 \begin{enumerate}
     \item For Item 1:
     \begin{itemize}
-    \item Item name:
-    \item Item start location ID:
-    \item Item target location ID:
+    \item Item name: USB\_drive
+    \item Item start location ID: 9
+    \item Item target location ID: 4
     \end{itemize}
         \item For Item 2:
     \begin{itemize}
-    \item Item name:
-    \item Item start location ID:
-    \item Item target location ID:
+    \item Item name: laptop\_charger
+    \item Item start location ID: 5
+    \item Item target location ID: 4
     \end{itemize}
         \item For Item 3:
     \begin{itemize}
-    \item Item name:
-    \item Item start location ID:
-    \item Item target location ID:
+    \item Item name: coffee
+    \item Item start location ID: 7
+    \item Item target location ID: 8
     \end{itemize}
-    % Copy-paste the above if you have more items, to list ALL items
+        \item For Item 4:
+    \begin{itemize}
+    \item Item name: notebook
+    \item Item start location ID: 11
+    \item Item target location ID: 5
+    \end{itemize}
+        \item For Item 5:
+    \begin{itemize}
+    \item Item name: library\_card
+    \item Item start location ID: 2
+    \item Item target location ID: 5
+    \end{itemize}
+            \item For Item 5:
+    \begin{itemize}
+    \item Item name: lab\_key
+    \item Item start location ID: 12
+    \item Item target location ID: 9
+    \end{itemize}
+            \item For Item 5:
+    \begin{itemize}
+    \item Item name: lucky\_mug
+    \item Item start location ID: 4
+    \item Item target location ID: 4
+    \end{itemize}
 \end{enumerate}
 
     \item Exact command(s) that should be used to pick up an item (choose any one item for this example), and the command(s) used to use/drop the item (can copy the list you assigned to \texttt{inventory\_demo} in the \texttt{project1\_simulation.py} file)
+Take item: ["go north,B", "inventory", "take library\_card", "inventory"]
+Use item: ["go west", "go north", "go west", "go south", "score", "take lucky\_mug", "use lucky\_mug", "score"]
+
     \item Which parts of your code (file, class, function/method) are involved in handling the \texttt{inventory} command:
 \end{enumerate}
+Class Gamestate defines inventory variable as list[Item]. Class AdventureGame initializes self.menu which includes "inventory". "\_handle\_menu\_command" checks if the command is "inventory", if yes, run "self.menu\_inventory()". In "menu\_inventory()", it uses list comprehention to get a inventory list from "self.state.inventory" and turn them become string and use "\_display" method to print.
 
 \section*{Score}
 \begin{enumerate}
 
     \item Briefly describe the way players can earn scores in your game. Include the first location in which they can increase their score, and the exact list of command(s) leading up to the score increase:
-
+Players can earn scores by using USB\_drive, laptop\_charger, coffee, notebook, lucky\_mug. It should be noted that if you use the notebook, you will achieve an instant win—this is an Easter egg.
 
     \item Copy the list you assigned to \texttt{scores\_demo} in the \texttt{project1\_simulation.py} file into this section of the report:
-
+["go west", "go north", "go west", "go south", "score", "take lucky\_mug", "use lucky\_mug", "score"]
 
     \item Which parts of your code (file, class, function/method) are involved in handling the \texttt{score} functionality:
+
 \end{enumerate}
+In class Gamestate, we initialize "score" as int and it default value is 0. Also, "self.menu" of class AdventureGame includes a string called score. Then, if player use "score" command to check their scores, "action" method will be executed and "self.\_handle\_menu\_command" will also be run. After that, "self.menu\_score()" will be run and "self.\_display" will show the score if output = True.
+
 
 \section*{Enhancements}
 \begin{enumerate}
