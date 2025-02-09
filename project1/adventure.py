@@ -181,11 +181,11 @@ class AdventureGame:
         self._display("You decided to:", command)
         if command in loc.available_commands:
             self._handle_movement(command, answer)
+            self.check_lose()
         elif command in self.menu:
             self._handle_menu_command(command)
         elif command in self.interactions:
             self._handle_interaction(command, item_name)
-        self.check_lose()
         return True
 
     def _is_interact_cmd(self, command: str) -> bool:
