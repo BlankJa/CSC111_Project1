@@ -185,6 +185,7 @@ class AdventureGame:
             self._handle_menu_command(command)
         elif command in self.interactions:
             self._handle_interaction(command, item_name)
+        self.check_lose()
         return True
 
     def _is_interact_cmd(self, command: str) -> bool:
@@ -203,7 +204,6 @@ class AdventureGame:
             self.menu_undo()
         else:
             new_loc.visited = True
-        self.check_lose()
 
     def _handle_menu_command(self, command: str) -> None:
         """Handle menu commands."""
@@ -237,10 +237,6 @@ class AdventureGame:
 
     def menu_inventory(self) -> None:
         """output the player's inventory."""
-        self._display("Inventory: " + str([item.name for item in self.state.inventory]))
-
-    def menu_inventory_simple(self) -> None:
-        """output the player's inventory in a simple format."""
         self._display("Inventory: " + str([item.name for item in self.state.inventory]))
 
     def menu_score(self) -> None:
@@ -428,11 +424,11 @@ if __name__ == "__main__":
     # When you are ready to check your work with python_ta, uncomment the following lines.
     # (Delete the "#" and space before each line.)
     # IMPORTANT: keep this code indented inside the "if __name__ == '__main__'" block
-    import python_ta
-    python_ta.check_all(config={
-        'max-line-length': 120,
-        'disable': ['R1705', 'E9998', 'E9999']
-    })
+    # import python_ta
+    # python_ta.check_all(config={
+    #     'max-line-length': 120,
+    #     'disable': ['R1705', 'E9998', 'E9999']
+    # })
 
     game = AdventureGame('game_data.json', 1)  # load data, setting initial location ID to 1
     game.run()
