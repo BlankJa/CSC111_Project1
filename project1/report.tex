@@ -13,21 +13,70 @@
 \maketitle
 
 \section*{Running the game}
-We should be able to run your game by simply running \texttt{adventure.py}. If you have any other requirements (e.g., installing certain modules), describe them here. Otherwise, skip this section.
+We should be able to run your game by simply running \texttt{adventure.py}. 
+Ensure all the necessary files are in the same directory:
+\begin{itemize}
+    \item \texttt{adventure.py}
+    \item \texttt{game_entities.py}
+    \item \texttt{proj1_event_logger.py}
+    \item \texttt{game_data.json}
+\end{itemize}
+
+To start the game, execute the following command in the command line:
+\begin{lstlisting}
+python adventure.py
+\end{lstlisting}
+
+Follow the game prompts to enter commands, such as:
+\begin{itemize}
+    \item Moving in a direction
+    \item Picking up items
+    \item Interacting with the game environment
+\end{itemize}
+
+Enjoy the game!
 
 \section*{Game Map}
 Example game map below (edit it to show your actual game map):
 
 \begin{verbatim}
-  1  2  3
- -1  4 -1
- -1  5 -1
+-1 12 -1 -1 -1 -1
+7   8  9       11
+4  -1  1  9 -1 10
+-1 -1  2  -1 -1
+-1 -1  3  -1 -1
+-1 -1  5  6  -1
 \end{verbatim}
 
 Starting location is: 1
 
 \section*{Game solution}
 List of commands:
+\begin{itemize}
+    \item go north, B
+    \item take library\_card
+    \item go north
+    \item go east, C
+    \item take laptop\_charger
+    \item go north
+    \item go west
+    \item go south
+    \item take notebook
+    \item go east
+    \item go north
+    \item go north
+    \item take lab\_key
+    \item go south
+    \item go south
+    \item take USB\_drive
+    \item go north
+    \item go west
+    \item go south
+    \item take lucky\_mug
+    \item use lucky\_mug
+    \item use USB\_drive
+    \item use laptop\_charger
+\end{itemize}
 
 \section*{Lose condition(s)}
 Description of how to lose the game:
