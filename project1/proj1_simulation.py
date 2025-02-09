@@ -165,10 +165,19 @@ if __name__ == "__main__":
         "go south",
         "use USB_drive",
         "go east",
+        "go west",
+        "use laptop_charger",
+        "take lucky_mug",
+        "use lucky_mug",
+        "go north",
+        "go east",
+        "go north",
+        "go south",
+        "go east",
+        "go south"
     ]
-    expected_log = [1, 2, 2, 3, 5, 5, 6, 10, 11, 11, 9, 8, 7, 7, 8, 8, 12, 12, 8, 9, 9, 1]
+    expected_log = [1, 2, 2, 3, 5, 5, 6, 10, 11, 11, 9, 8, 7, 7, 8, 8, 12, 12, 8, 9, 9, 1, 9, 9, 9, 8, 12, 8, 9]
     sim = AdventureGameSimulation('game_data.json', 1, lose_demo)
-    print(sim.get_id_log())
     assert expected_log == sim.get_id_log()
     sim.run()
 
